@@ -13,6 +13,7 @@ services:
 
   php:
     container_name: '${APPLICATION}'
+    image: '${APPLICATION}'
     build:
       context: .
       args:
