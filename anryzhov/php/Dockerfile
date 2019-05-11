@@ -1,8 +1,9 @@
 # ./docker/php/Dockerfile
-FROM php:7.2-fpm
+FROM php:7.3-fpm
 
 RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 COPY config/symfony.ini $PHP_INI_DIR/conf.d/
+COPY config/ss-docker.conf $PHP_INI_DIR/../php-fpm.d/
 
 RUN set -xe; \
     apt-get update; \

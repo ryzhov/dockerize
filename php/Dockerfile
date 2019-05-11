@@ -1,5 +1,5 @@
 # ./docker/php/Dockerfile
-FROM anryzhov/php:7.2-fpm
+FROM anryzhov/php:7.3-fpm
 
 ARG user
 ARG user_id
