@@ -7,9 +7,18 @@ COPY config/ss-docker.conf $PHP_INI_DIR/../php-fpm.d/
 
 RUN set -xe; \
     apt-get update; \
-    apt-get install -y --no-install-recommends libxml2-dev libicu-dev libgmp-dev libzip-dev unzip; \
+    apt-get install -y --no-install-recommends libmemcached-dev libxml2-dev libicu-dev libgmp-dev libzip-dev unzip; \
     rm -rf /var/lib/apt/lists/*
 
+# Install memcached
+RUN set -ex \
+    && MEMCACHED="`mktemp -d`" \
+    && curl -skL https://github.com/php-memcached-dev/php-memcached/archive/master.tar.gz | tar zxf - --strip-components 1 -C $MEMCACHED \
+    && docker-php-ext-configure $MEMCACHED \
+    && docker-php-ext-install $MEMCACHED \
+    && rm -rf $MEMCACHED
+
+# Install redis
 RUN set -xe; \
     pecl install -o -f redis; \
     rm -rf /tmp/pear; \
