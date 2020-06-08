@@ -1,7 +1,7 @@
 # ./docker/php/Dockerfile
-FROM php:7.3-fpm
+FROM php:fpm
 
-ARG APCU_VERSION=5.1.11
+ARG APCU_VERSION=5.1.18
 
 RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 COPY config/symfony.ini $PHP_INI_DIR/conf.d/

@@ -1,3 +1,3 @@
 #!/bin/sh
 
-docker image build --tag $DOCKERID/php:7.3-fpm .
+docker image build --tag $DOCKERID/php:fpm .
