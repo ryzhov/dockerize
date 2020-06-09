@@ -41,6 +41,3 @@ RUN echo "apc.enable_cli=1" > /usr/local/etc/php/php.ini
 RUN echo "apc.enable=1" > /usr/local/etc/php/php.ini
 #APCU
 
-RUN set -xe; \
-    curl --insecure https://getcomposer.org/composer.phar -o /usr/bin/composer; \
-    chmod +x /usr/bin/composer
