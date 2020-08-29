@@ -1,15 +1,16 @@
 # ./docker/php/Dockerfile
-FROM php:fpm
+FROM php:7.4-fpm
 
 ARG APCU_VERSION=5.1.18
 
 RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
-COPY config/symfony.ini $PHP_INI_DIR/conf.d/
-COPY config/ss-docker.conf $PHP_INI_DIR/../php-fpm.d/
+COPY .docker/dev/config/symfony.ini $PHP_INI_DIR/conf.d/
+COPY .docker/dev/config/ss-docker.conf $PHP_INI_DIR/../php-fpm.d/
 
 RUN set -xe; \
     apt-get update; \
-    apt-get install -y --no-install-recommends libmemcached-dev libxml2-dev libicu-dev libgmp-dev libzip-dev unzip libwebp-dev libjpeg-dev libpng-dev libz-mingw-w64-dev libxpm-dev libldap2-dev ; \
+    apt-get install -y --no-install-recommends libmemcached-dev libxml2-dev libicu-dev libgmp-dev libzip-dev \
+        unzip libwebp-dev libjpeg-dev libpng-dev libz-mingw-w64-dev libxpm-dev libldap2-dev ; \
     rm -rf /var/lib/apt/lists/*
 
 # Install memcached
