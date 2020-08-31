@@ -14,18 +14,19 @@ RUN set -xe; \
     rm -rf /var/lib/apt/lists/*
 
 # Install memcached
-RUN set -ex \
+RUN set -xe \
     && MEMCACHED="`mktemp -d`" \
     && curl -skL https://github.com/php-memcached-dev/php-memcached/archive/master.tar.gz | tar zxf - --strip-components 1 -C $MEMCACHED \
     && docker-php-ext-configure $MEMCACHED \
     && docker-php-ext-install $MEMCACHED \
     && rm -rf $MEMCACHED
 
-# Install redis
+#INSTALL REDIS
 RUN set -xe; \
     pecl install -o -f redis; \
-    rm -rf /tmp/pear; \
-    docker-php-ext-enable redis
+    docker-php-ext-enable redis; \
+    rm -rf /tmp/pear
+#REDIS
 
 RUN docker-php-ext-install pdo_mysql
 RUN docker-php-ext-install soap
@@ -36,9 +37,9 @@ RUN docker-php-ext-install gd
 RUN docker-php-ext-install ldap
 
 #INSTALL APCU
-RUN pecl install apcu-${APCU_VERSION} && docker-php-ext-enable apcu
-RUN echo "extension=apcu.so" > /usr/local/etc/php/php.ini
-RUN echo "apc.enable_cli=1" > /usr/local/etc/php/php.ini
-RUN echo "apc.enable=1" > /usr/local/etc/php/php.ini
+RUN set -xe; \
+    pecl install apcu-${APCU_VERSION}; \
+    docker-php-ext-enable apcu; \
+    rm -rf /tmp/pear
 #APCU
 
