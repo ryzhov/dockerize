@@ -5,23 +5,22 @@ ARG APCU_VERSION=5.1.18
 ARG PHP_INI
 ARG ENV
 
-RUN mv "$PHP_INI_DIR/$PHP_INI" "$PHP_INI_DIR/php.ini"
-COPY .docker/${ENV}/symfony.ini $PHP_INI_DIR/conf.d/
-COPY .docker/${ENV}/ss-docker.conf $PHP_INI_DIR/../php-fpm.d/
-
+#INSTALL DEPENDEMCIES
 RUN set -eux; \
     apt-get update; \
     apt-get install -y --no-install-recommends libmemcached-dev libxml2-dev libicu-dev libgmp-dev libzip-dev \
         unzip libwebp-dev libjpeg-dev libpng-dev libz-mingw-w64-dev libxpm-dev libldap2-dev wget procps; \
     rm -rf /var/lib/apt/lists/*
+#DEPENDENCIES
 
-# Install memcached
+#INSTALL MEMCACHED
 RUN set -eux \
     && MEMCACHED="`mktemp -d`" \
     && curl -skL https://github.com/php-memcached-dev/php-memcached/archive/master.tar.gz | tar zxf - --strip-components 1 -C $MEMCACHED \
     && docker-php-ext-configure $MEMCACHED \
     && docker-php-ext-install $MEMCACHED \
     && rm -rf $MEMCACHED
+#MEMCACHED
 
 #INSTALL REDIS
 RUN set -eux; \
@@ -49,5 +48,10 @@ RUN set -eux; \
 #INSTALL COMPOSER
 COPY .docker/install-composer.sh /tmp
 RUN cd /tmp && /tmp/install-composer.sh
-#####
+#COMPOSER
 
+#INSTALL CONFIGURATION
+RUN mv "$PHP_INI_DIR/$PHP_INI" "$PHP_INI_DIR/php.ini"
+COPY .docker/${ENV}/symfony.ini $PHP_INI_DIR/conf.d/
+COPY .docker/${ENV}/ss-docker.conf $PHP_INI_DIR/../php-fpm.d/
+#CONFIGURATION
