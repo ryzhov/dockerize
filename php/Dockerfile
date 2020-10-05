@@ -1,9 +1,6 @@
-# ./docker/php/Dockerfile
 FROM php:7.4-fpm
 
 ARG APCU_VERSION=5.1.18
-ARG PHP_INI
-ARG ENV
 
 #INSTALL DEPENDEMCIES
 RUN set -eux; \
@@ -46,12 +43,6 @@ RUN set -eux; \
 #APCU
 
 #INSTALL COMPOSER
-COPY .docker/install-composer.sh /tmp
+COPY ./install-composer.sh /tmp
 RUN cd /tmp && /tmp/install-composer.sh
 #COMPOSER
-
-#INSTALL CONFIGURATION
-RUN mv "$PHP_INI_DIR/$PHP_INI" "$PHP_INI_DIR/php.ini"
-COPY .docker/${ENV}/symfony.ini $PHP_INI_DIR/conf.d/
-COPY .docker/${ENV}/ss-docker.conf $PHP_INI_DIR/../php-fpm.d/
-#CONFIGURATION

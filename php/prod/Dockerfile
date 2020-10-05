@@ -1,0 +1,13 @@
+ARG BASE_IMAGE
+FROM ${BASE_IMAGE}
+
+ARG PHP_INI
+ARG ENV
+
+#INSTALL CONFIGURATION
+RUN mv "${PHP_INI_DIR}/${PHP_INI}" "${PHP_INI_DIR}/php.ini"
+COPY symfony.ini $PHP_INI_DIR/conf.d/
+COPY ss-docker.conf $PHP_INI_DIR/../php-fpm.d/
+#CONFIGURATION
+
+ENV APP_ENV=${ENV}
