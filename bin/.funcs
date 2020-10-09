@@ -1,0 +1,22 @@
+
+app_version() {
+    if [ -f package.json ]; then
+  	local result=`cat package.json | jq -r '.version'`
+    else
+	local result=${APP_VERSION:-dev}
+    fi
+
+    printf "$result"
+}
+
+app_name() {
+    [ -z $1 ] && printf "${SERVICE}_${NAMESPACE}" || printf "${SERVICE}"
+}
+
+production_image() {
+    printf "${REGISTRY}/$(app_name $1):$(app_version)"
+}
+
+container_name() {
+    printf "$(app_name)_${APP_ENV}"
+}

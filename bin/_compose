@@ -1,0 +1,25 @@
+#!/bin/bash
+
+. ./.env
+. ~/bin/.funcs
+
+REGISTRY=${REGISTRY:-noname}
+export USER_NAME=`id -u -n`
+export USER_ID=`id -u`
+export APP_VERSION=$(app_version)
+export APP_NAME=$(app_name)
+export APP_ENV=${APP_ENV:-dev}
+export APP_SECRET=${APP_SECRET:-secret}
+export CONTAINER_NAME=$(container_name)
+export IMAGE=$(production_image ${SHORT_NAME})
+export BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
+export COMMIT_ID=$(git log --format="%H" -n 1)
+export NODE_DEV_IMAGE=anryzhov/node-dev:buster-slim
+export DEV_IMAGE=${DEV_IMAGE:-anryzhov/default:dev}
+
+COMPOSE_FILE=`[ ${APP_ENV} = "dev" ] && echo "docker-compose.yml" || echo "docker-compose.prod.yml"`
+
+echo "application => \"${APP_NAME}\", environment => \"${APP_ENV}\", version => \"${APP_VERSION}\", contaner name => \"${CONTAINER_NAME}\""
+
+docker-compose -p ${APP_NAME} -f ${COMPOSE_FILE} ${@}
+

@@ -1,0 +1,15 @@
+#!/bin/bash
+
+
+. ./.env
+. ~/bin/.funcs
+
+APP_USER=${APP_USER:-root}
+APP_VERSION=$(app_version)
+APP_NAME=$(app_name)
+CONTAINER=${APP_NAME}_${APP_ENV}
+USER=`[ ${APP_ENV} == 'dev' ] && id -u -n || echo ${APP_USER}`
+COMMAND=${@:-bash}
+
+echo "exec command => \"${COMMAND}\" in container => \"${CONTAINER}\" under user => \"${USER}\""
+docker exec -it -u ${USER} ${CONTAINER} ${COMMAND}
