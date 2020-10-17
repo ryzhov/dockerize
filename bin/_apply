@@ -6,11 +6,11 @@
 APP_VERSION=$(app_version)
 APP_NAME=$(app_name)
 PRODUCTION=$(production_image ${SHORT_NAME})
-DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' ${PRODUCTION})
+DIGEST_IMAGE=$(docker inspect --format='{{index .RepoDigests 0}}' ${PRODUCTION})
 
-export PRODUCTION DIGEST
+export PRODUCTION DIGEST_IMAGE
 
-[ -z "${DIGEST}" ] && echo "exit due digest image not set, try push image => \"${PRODUCTION}\" to registry, exit" && exit 1
+[ -z "${DIGEST_IMAGE}" ] && echo "exit due digest image not set, try push image => \"${PRODUCTION}\" to registry, exit" && exit 1
 [ -z "${1}" ] && echo "yaml file as parameter required to apply, not found, exit " && exit 1
 
 echo "application \"${APP_NAME}@v${APP_VERSION}\" apply \"${1}\" to namespace => \"${NAMESPACE}\""

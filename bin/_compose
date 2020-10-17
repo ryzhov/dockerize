@@ -13,7 +13,7 @@ export APP_SECRET=${APP_SECRET:-secret}
 export CONTAINER_NAME=$(container_name)
 export IMAGE=$(production_image ${SHORT_NAME})
 export BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
-export COMMIT_ID=$(git log --format="%H" -n 1)
+export VCS_REF=$(git log --format="%H" -n 1)
 export NODE_DEV_IMAGE=anryzhov/node-dev:buster-slim
 export DEV_IMAGE=${DEV_IMAGE:-anryzhov/default:dev}
 
