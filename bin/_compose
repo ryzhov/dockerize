@@ -8,18 +8,22 @@ export USER_NAME=`id -u -n`
 export USER_ID=`id -u`
 export APP_VERSION=$(app_version)
 export APP_NAME=$(app_name)
+export APP_PATH=${APP_PATH:-/var/www/html}
 export APP_ENV=${APP_ENV:-dev}
 export APP_SECRET=${APP_SECRET:-secret}
-export CONTAINER_NAME=$(container_name)
 export IMAGE=$(production_image ${SHORT_NAME})
 export BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
-export VCS_REF=$(git log --format="%H" -n 1)
-export NODE_DEV_IMAGE=anryzhov/node-dev:buster-slim
-export DEV_IMAGE=${DEV_IMAGE:-anryzhov/default:dev}
+export VCS_REF=$([ -d .git ] && git log --format="%H" -n 1 || echo nogit)
+export VERSION=${APP_VERSION}
+export DEV_IMAGE=${DEV_IMAGE:-undefined}
+export APP_PATH
+export NAMESPACE
 
-COMPOSE_FILE=`[ ${APP_ENV} = "dev" ] && echo "docker-compose.yml" || echo "docker-compose.prod.yml"`
+COMPOSE_FILE=${COMPOSE_FILE:-docker-compose.local.yml}
+COMPOSE_ENV=${COMPOSE_ENV:-.env.local}
 
-echo "application => \"${APP_NAME}\", environment => \"${APP_ENV}\", version => \"${APP_VERSION}\", contaner name => \"${CONTAINER_NAME}\""
+echo "application => \"${APP_NAME}\", environment => \"${APP_ENV}\", version => \"${APP_VERSION}\"\
+ compose_file => \"${COMPOSE_FILE}\" compose_env => \"${COMPOSE_ENV}\" app_path =>\"${APP_PATH}\" vcs_ref => \"${VCS_REF}\""
 
-docker-compose -p ${APP_NAME} -f ${COMPOSE_FILE} ${@}
+docker-compose --env-file=${COMPOSE_ENV} -f ${COMPOSE_FILE} -p ${APP_NAME} ${@}
 

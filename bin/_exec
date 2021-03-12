@@ -1,15 +1,18 @@
 #!/bin/bash
 
-
 . ./.env
 . ~/bin/.funcs
 
-APP_USER=${APP_USER:-root}
-APP_VERSION=$(app_version)
-APP_NAME=$(app_name)
-CONTAINER=${APP_NAME}_${APP_ENV}
-USER=`[ ${APP_ENV} == 'dev' ] && id -u -n || echo ${APP_USER}`
-COMMAND=${@:-bash}
+export APP_NAME=${APP_NAME:-$(app_name)}
+export APP_PATH=${APP_PATH:-/var/www/html}
+export NAMESPACE
+export DEV_IMAGE
 
-echo "exec command => \"${COMMAND}\" in container => \"${CONTAINER}\" under user => \"${USER}\""
-docker exec -it -u ${USER} ${CONTAINER} ${COMMAND}
+USER=`id -u -n`
+COMPOSE_FILE=${COMPOSE_FILE:-docker-compose.local.yml}
+COMPOSE_ENV=${COMPOSE_ENV:-.env.local}
+SERVICE_COMMAND=${@:-dev bash}
+
+echo "exec service command => \"${SERVICE_COMMAND}\" app_name => \"${APP_NAME}\" user => \"${USER}\""
+docker-compose --env-file=${COMPOSE_ENV} -f ${COMPOSE_FILE} -p ${APP_NAME} exec --user ${USER} ${SERVICE_COMMAND}
+
