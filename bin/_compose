@@ -7,7 +7,7 @@ REGISTRY=${REGISTRY:-noname}
 export USER_NAME=`id -u -n`
 export USER_ID=`id -u`
 export APP_VERSION=$(app_version)
-export APP_NAME=$(app_name)
+export APP_NAME=${APP_NAME:-$(app_name)}
 export APP_PATH=${APP_PATH:-/var/www/html}
 export APP_ENV=${APP_ENV:-dev}
 export APP_SECRET=${APP_SECRET:-secret}
@@ -16,7 +16,6 @@ export BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
 export VCS_REF=$([ -d .git ] && git log --format="%H" -n 1 || echo nogit)
 export VERSION=${APP_VERSION}
 export DEV_IMAGE=${DEV_IMAGE:-undefined}
-export APP_PATH
 export NAMESPACE
 
 COMPOSE_FILE=${COMPOSE_FILE:-docker-compose.local.yml}
