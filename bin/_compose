@@ -3,7 +3,6 @@
 [ -f .env ] && . .env
 [ -f .env.local ] && . .env.local
 
-REGISTRY=${REGISTRY:-noname}
 DIR=$(pwd)
 export USER_NAME=$(id -u -n)
 export USER_ID=$(id -u)
