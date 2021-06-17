@@ -1,1 +1,1 @@
-# dockers environment for node or php projects with helpful scripts
+# dockers environment for node/php projects with helpful scripts
