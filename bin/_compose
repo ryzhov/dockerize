@@ -1,28 +1,25 @@
 #!/bin/bash
 
-. ./.env
-. ~/bin/.funcs
+[ -f .env ] && . .env
+[ -f .env.local ] && . .env.local
 
 REGISTRY=${REGISTRY:-noname}
-export USER_NAME=`id -u -n`
-export USER_ID=`id -u`
-export APP_VERSION=$(app_version)
-export APP_NAME=${APP_NAME:-$(app_name)}
+DIR=$(pwd)
+export USER_NAME=$(id -u -n)
+export USER_ID=$(id -u)
+export APP_VERSION=$([ -f package.json ] && { cat package.json | jq -r .version; } || echo ${APP_VERSION:-0.0.0})
+export VERSION=${APP_VERSION}
+export APP_NAME=${APP_NAME:-$(basename "${DIR}")}
 export APP_PATH=${APP_PATH:-/var/www/html}
 export APP_ENV=${APP_ENV:-dev}
-export APP_SECRET=${APP_SECRET:-secret}
-export IMAGE=$(production_image ${SHORT_NAME})
 export BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
 export VCS_REF=$([ -d .git ] && git log --format="%H" -n 1 || echo nogit)
-export VERSION=${APP_VERSION}
-export DEV_IMAGE=${DEV_IMAGE:-undefined}
-export NAMESPACE
 
-COMPOSE_FILE=${COMPOSE_FILE:-docker-compose.local.yml}
-COMPOSE_ENV=${COMPOSE_ENV:-.env.local}
+COMPOSE_FILE=${COMPOSE_FILE:-docker-compose.yml}
+COMPOSE_ENV=${COMPOSE_ENV:-.env}
 
-echo "application => \"${APP_NAME}\", environment => \"${APP_ENV}\", version => \"${APP_VERSION}\"\
- compose_file => \"${COMPOSE_FILE}\" compose_env => \"${COMPOSE_ENV}\" app_path =>\"${APP_PATH}\" vcs_ref => \"${VCS_REF}\""
+echo "application => \"${APP_NAME}\", environment => \"${APP_ENV}\", version => \"${APP_VERSION}\",\
+ app_path =>\"${APP_PATH}\", vcs_ref => \"${VCS_REF}\""
 
-docker-compose --env-file=${COMPOSE_ENV} -f ${COMPOSE_FILE} -p ${APP_NAME} ${@}
-
+set -xe
+docker-compose --env-file="${COMPOSE_ENV}" -f "${COMPOSE_FILE}" -p "${APP_NAME}" "${@}"
