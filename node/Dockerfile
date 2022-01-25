@@ -18,7 +18,7 @@ ARG USER_ID
 # -- install tools --
 RUN apt-get update && apt-get install -y \
     curl wget procps inetutils-ping net-tools iproute2 git vim vim-tiny \
-    sudo gettext build-essential python jq locales unzip
+    sudo gettext build-essential python jq locales unzip bash-completion
 
 # -- k8s apt repository && kubectl --
 RUN curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg \
