@@ -3,6 +3,7 @@ ARG VERSION
 # -- main image --
 FROM node:${VERSION}
 
+ARG WORKDIR=/usr/local/bin
 ARG USER_NAME
 ARG USER_ID
 
@@ -14,8 +15,8 @@ RUN apt-get update && apt-get install -y \
 # -- install npm --
 RUN npm install -g npm@latest
 
-RUN groupadd -g 998 docker \
-    && useradd -g users -G root,www-data,sudo,docker -u ${USER_ID} ${USER_NAME} -s /bin/bash \
+# -- create local user --
+RUN useradd -g users -G root,www-data,sudo -u ${USER_ID} ${USER_NAME} -s /bin/bash \
     && echo "%sudo   ALL=(ALL:ALL) NOPASSWD: ALL" >> /etc/sudoers
 
 # Locale
@@ -31,4 +32,8 @@ ENV LC_ALL ru_RU.UTF-8
 # +Timezone
 ENV TZ Europe/Moscow
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+WORKDIR ${WORKDIR}
+COPY sleep.js .
+CMD [ "node", "sleep.js" ]
 
