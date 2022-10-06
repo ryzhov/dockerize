@@ -13,7 +13,7 @@ export VERSION=${APP_VERSION}
 export APP_ENV=${APP_ENV:-dev}
 export BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
 export VCS_REF=$([ -d .git ] && git log --format="%H" -n 1 || echo nogit)
-export DEV_IMAGE=${DEV_IMAGE:-anryzhov/node-dev:lts-slim}
+export DEV_IMAGE=${DEV_IMAGE:-anryzhov/node-slim:lts-slim}
 
 COMPOSE_FILE=${COMPOSE_FILE:-docker-compose.yml}
 COMPOSE_ENV=${COMPOSE_ENV:-.env}
