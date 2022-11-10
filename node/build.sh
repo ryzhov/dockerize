@@ -4,7 +4,7 @@
 . ./.env.local
 
 DOCKERFILE="${ENV}"/Dockerfile
-IMAGE=${REGISTRY}/node-${ENV}:${VERSION}
+IMAGE=${REGISTRY}/node:${VERSION}
 USER_NAME=$(id -u -n)
 USER_ID=$(id -u)
 
