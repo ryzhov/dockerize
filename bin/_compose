@@ -8,12 +8,12 @@ export USER_NAME=$(id -u -n)
 export USER_ID=$(id -u)
 export APP_VERSION=$([ -f package.json ] && { cat package.json | jq -r .version; } || echo ${APP_VERSION:-0.0.0})
 export APP_NAME=${APP_NAME:-$(basename "${DIR}")}
-export APP_PATH=${APP_PATH:-/var/www}
+export APP_PATH=${APP_PATH:-${DIR}}
 export VERSION=${APP_VERSION}
 export APP_ENV=${APP_ENV:-dev}
 export BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
 export VCS_REF=$([ -d .git ] && git log --format="%H" -n 1 || echo nogit)
-export DEV_IMAGE=${DEV_IMAGE:-anryzhov/node-slim:lts-slim}
+export DEV_IMAGE=${DEV_IMAGE:-node:lts-slim}
 
 COMPOSE_FILE=${COMPOSE_FILE:-docker-compose.yml}
 COMPOSE_ENV=${COMPOSE_ENV:-.env}
