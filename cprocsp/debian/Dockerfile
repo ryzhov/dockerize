@@ -28,6 +28,7 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 # -- sep PATH for cprocsp binaries --
 ENV PATH="$PATH:/opt/cprocsp/bin/amd64:/opt/cprocsp/sbin/amd64"
+ENV CPROCSP_VERSION="${VERSION}"
 
 # -- declare volume for key containers --
 VOLUME ${CONTDIR}
