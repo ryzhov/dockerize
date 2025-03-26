@@ -2,7 +2,6 @@
 
 . ./.env
 
-
 tar xvzf "${CPROTAR}.tgz"
 
 VERSION=$(dpkg-deb -f "${CPROTAR}"/lsb-cprocsp-base_*_all.deb Version)
@@ -14,11 +13,11 @@ IMAGE=${REGISTRY}/cprocsp:${VERSION}
 echo "env => ${ENV}; image => ${IMAGE}; version => ${VERSION};"
 set -xe
 
-docker image build -t "${IMAGE}" -f "${DOCKERFILE}" --progress plain \
+docker build -t "${IMAGE}" -f "${DOCKERFILE}" --progress plain \
+    --secret id=CPROCSP_LICENSE \
     --build-arg VERSION="${VERSION}" \
     --build-arg CPROTAR="${CPROTAR}" \
     .
-
 
 # -- remove cprocsp directory --
 rm -rf "${CPROTAR}"
